@@ -24,10 +24,7 @@ namespace c_sharp_bookflix.Controllers
         {
             return View();
         }
-        public IActionResult Genres()
-        {
-            return View();
-        }
+
        
     }
 }
