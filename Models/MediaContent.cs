@@ -2,7 +2,7 @@
 
 namespace c_sharp_bookflix.Models
 {
-    public class MediaContent
+    public abstract class MediaContent
     {
         [Key]
         public int Id { get; set; }
@@ -17,3 +17,4 @@ namespace c_sharp_bookflix.Models
 
     }
 }
+

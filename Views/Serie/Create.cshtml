@@ -1,0 +1,40 @@
+﻿@{
+
+    Layout = "_EditorLayout";
+}
+@model TvSerie;
+    @*id titolo durata descrizione visualizzazione-count season-count ..media info
+
+     // Year IsNew TvSerieId L-Cast L-Genres L-Features
+    *@
+
+
+    <h2>Crea</h2>
+         <form asp-controller="Serie" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+            @*titolo*@
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="inputPassword6" class="col-form-label"><strong>Nome Attore:</strong></label>
+                </div>
+                <div class="col-auto">
+                    <input asp-for="@Model.Title" class="d-block form-control" />
+                    <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                </div>         
+            </div>
+            @*durata*@
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="inputPassword6" class="col-form-label"><strong>Nome Attore:</strong></label>
+                </div>
+                <div class="col-auto">
+                    <input asp-for="@Model.SeasonCount" class="d-block form-control" />
+                    <span asp-validation-for="@Model.SeasonCount" class="text-danger"></span>
+                </div>         
+            </div>
+
+            <div class="text-end">
+                <input type="submit" class="btn btn-small  btn-secondary" value="Salva">
+            </div>
+        </form>
+

@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "_EditorLayout";
+}
+@model List<Film>;
+    <h2>Lista Film</h2>
+    <a href="@Url.Action("Create", "Film")" class="btn btn-secondary">Nuovo +</a>
+    @if(Model.Count == 0){
+        <div class="alert container" role="alert">
+            Non sono preseenti Film nella tua lista
+        </div>
+    }
+    else{
+        @*<div class="container-fluid debug">
+            <div class="row">
+                <div class="col-12 col-md-6 debug"></div>
+                <div class="col-12 col-md-6 debug"></div>
+
+            </div>
+        </div>*@
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#Id</th>
+              <th scope="col">Titolo</th>
+              <th scope="col">Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+              @foreach(Film film in Model){
+
+                <tr>
+                    <th scope="row">@film.Id</th>
+                    <td>@film.Title</td>
+                    <td>
+                        <a href="@Url.Action("Update", "Film", new{Id = film.Id})">Modifica</a>
+                        <form asp-controller="Film" asp-action="Delete" asp-route-id="@film.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                            <input type="submit" class="btn rounded-pill" value="Elimina">
+                        </form>
+                    </td>
+                </tr>
+              }
+          </tbody>
+        </table>
+
+    }

@@ -56,8 +56,7 @@ namespace c_sharp_bookflix.Controllers
             _ctx.Genres?.Update(genre);
             _ctx.SaveChanges();
 
-            List<Genre> genres = _ctx.Genres?.ToList()!;
-            return View("Index", genres);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

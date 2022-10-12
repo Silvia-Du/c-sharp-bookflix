@@ -1,33 +1,51 @@
 ﻿using c_sharp_bookflix.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace c_sharp_bookflix.Controllers
 {
-    public class ActorController : Controller
+    public class FilmController : Controller
     {
         readonly BoolflixContext _ctx = new();
 
         public IActionResult Index()
         {
-            List<Actor> actors = _ctx.Actors.ToList();
-            return View(actors);
+            
+            List<Film> films = _ctx.Films?.Include("MediaInfo").OrderBy(x => x.Id).ToList()!;
+            return View(films);
         }
 
         public IActionResult Create()
         {
-            return View();
+            FilmMediainfo UtilityClass = new();
+            UtilityClass.Actors = _ctx.Actors?.OrderBy(x => x.Name).ToList()!;
+            UtilityClass.Features = _ctx.Features?.OrderBy(x => x.Id).ToList()!;
+            UtilityClass.Genres = _ctx.Genres?.OrderBy(x => x.Id).ToList()!;
+
+            return View(UtilityClass);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Actor actor)
+        public IActionResult Create(FilmMediainfo utilityClass)
         {
+            //Duration Description VisualizationCount -- Year IsNew FilmId
+
             if (!ModelState.IsValid)
             {
-                return View();
+                utilityClass.Actors = _ctx.Actors?.OrderBy(x => x.Name).ToList()!;
+                utilityClass.Features = _ctx.Features?.OrderBy(x => x.Id).ToList()!;
+                utilityClass.Genres = _ctx.Genres?.OrderBy(x => x.Id).ToList()!;
+
+                return View(utilityClass);
             }
 
-            _ctx.Actors.Add(actor);
+            utilityClass.Film.Duration = 0;
+                _ctx.Ingredients?
+                .Where(ing => utilityClass.IngredientIds
+                .Contains(ing.Id)).ToList();
+
+            _ctx.Pizzas?.Add(utilityClass.Pizza);
             _ctx.SaveChanges();
             return RedirectToAction(nameof(Index));
         }

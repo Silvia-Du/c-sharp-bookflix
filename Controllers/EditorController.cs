@@ -16,15 +16,11 @@ namespace c_sharp_bookflix.Controllers
             return View();
         }
 
-        public IActionResult Film()
-        {
-            return View();
-        }
-        public IActionResult Serie()
+        public IActionResult Episode()
         {
             return View();
         }
 
-       
+
     }
 }

@@ -7,7 +7,7 @@ namespace c_sharp_bookflix.Models
 {
     public class BoolflixContext : DbContext
     {
-        public DbSet<TvSeries>? Series { get; set; }
+        public DbSet<TvSerie>? Series { get; set; }
         public DbSet<Film>? Films { get; set; }
         public DbSet<Episode>? Episodes { get; set; }
         public DbSet<MediaInfo>? MediaInfos { get; set; }

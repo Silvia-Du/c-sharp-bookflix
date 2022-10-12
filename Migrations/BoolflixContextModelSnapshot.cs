@@ -75,10 +75,15 @@ namespace c_sharp_bookflix.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TvSerieId")
+                        .HasColumnType("int");
+
                     b.Property<int>("VisualizationCount")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TvSerieId");
 
                     b.ToTable("Episodes");
                 });
@@ -184,7 +189,7 @@ namespace c_sharp_bookflix.Migrations
                     b.Property<bool>("IsNew")
                         .HasColumnType("bit");
 
-                    b.Property<int>("TvSeriesId")
+                    b.Property<int>("TvSerieId")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -195,13 +200,13 @@ namespace c_sharp_bookflix.Migrations
                     b.HasIndex("FilmId")
                         .IsUnique();
 
-                    b.HasIndex("TvSeriesId")
+                    b.HasIndex("TvSerieId")
                         .IsUnique();
 
                     b.ToTable("MediaInfos");
                 });
 
-            modelBuilder.Entity("TvSeries", b =>
+            modelBuilder.Entity("TvSerie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -244,6 +249,17 @@ namespace c_sharp_bookflix.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Episode", b =>
+                {
+                    b.HasOne("TvSerie", "TvSerie")
+                        .WithMany("Episodes")
+                        .HasForeignKey("TvSerieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TvSerie");
+                });
+
             modelBuilder.Entity("FeatureMediaInfo", b =>
                 {
                     b.HasOne("Feature", null)
@@ -282,15 +298,15 @@ namespace c_sharp_bookflix.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TvSeries", "Series")
+                    b.HasOne("TvSerie", "TvSerie")
                         .WithOne("MediaInfo")
-                        .HasForeignKey("MediaInfo", "TvSeriesId")
+                        .HasForeignKey("MediaInfo", "TvSerieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Film");
 
-                    b.Navigation("Series");
+                    b.Navigation("TvSerie");
                 });
 
             modelBuilder.Entity("Film", b =>
@@ -298,8 +314,10 @@ namespace c_sharp_bookflix.Migrations
                     b.Navigation("MediaInfo");
                 });
 
-            modelBuilder.Entity("TvSeries", b =>
+            modelBuilder.Entity("TvSerie", b =>
                 {
+                    b.Navigation("Episodes");
+
                     b.Navigation("MediaInfo");
                 });
 #pragma warning restore 612, 618

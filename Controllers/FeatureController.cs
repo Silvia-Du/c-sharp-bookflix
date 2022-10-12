@@ -57,8 +57,8 @@ namespace c_sharp_bookflix.Controllers
 
             _ctx.Features.Update(feature);
             _ctx.SaveChanges();
-            List<Feature> features = _ctx.Features.ToList();
-            return View("Index", features);
+            return RedirectToAction(nameof(Index));
+
         }
 
         [HttpPost]

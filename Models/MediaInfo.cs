@@ -10,8 +10,8 @@ public class MediaInfo
     //public string VideoQuality { get; set; }
 
     //relations 1:1
-    public int TvSeriesId { get; set; }
-    public TvSeries? Series { get; set; }
+    public int TvSerieId { get; set; }
+    public TvSerie? TvSerie { get; set; }
 
     public int FilmId { get; set; }
     public Film? Film { get; set; }
@@ -21,4 +21,5 @@ public class MediaInfo
     public List<Feature>? Features { get; set; }
 
 
+    
 }
