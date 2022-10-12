@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "_EditorLayout";
+}
+@model List<Actor>;
+    <h2>Lista Attori</h2>
+    <a href="@Url.Action("Create", "Actor")" class="btn btn-secondary">Nuova +</a>
+    @if(Model.Count == 0){
+        <div class="alert container" role="alert">
+            Non sono preseenti Attori nella tua lista
+        </div>
+    }
+    else{
+        @*<div class="container-fluid debug">
+            <div class="row">
+                <div class="col-12 col-md-6 debug"></div>
+                <div class="col-12 col-md-6 debug"></div>
+
+            </div>
+        </div>*@
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#Id</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+              @foreach(Actor actor in Model){
+
+                <tr>
+                    <th scope="row">@actor.Id</th>
+                    <td>@actor.Name @actor.Surname</td>
+                    <td>
+                        <a href="@Url.Action("Update", "Actor", new{Id = actor.Id})">Modifica</a>
+                        <form asp-controller="Actor" asp-action="Delete" asp-route-id="@actor.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                            <input type="submit" class="btn rounded-pill" value="Elimina">
+                        </form>
+                    </td>
+                </tr>
+              }
+          </tbody>
+        </table>
+
+    }
