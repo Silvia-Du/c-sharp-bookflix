@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using c_sharp_bookflix.Models;
 
@@ -11,9 +12,10 @@ using c_sharp_bookflix.Models;
 namespace c_sharp_bookflix.Migrations
 {
     [DbContext(typeof(BoolflixContext))]
-    partial class BoolflixContextModelSnapshot : ModelSnapshot
+    [Migration("20221013064551_NullableData")]
+    partial class NullableData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

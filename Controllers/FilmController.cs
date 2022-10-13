@@ -1,5 +1,6 @@
 ﻿using c_sharp_bookflix.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 
 namespace c_sharp_bookflix.Controllers
@@ -17,62 +18,93 @@ namespace c_sharp_bookflix.Controllers
 
         public IActionResult Create()
         {
-            FilmMediainfo UtilityClass = new();
-            UtilityClass.Actors = _ctx.Actors?.OrderBy(x => x.Name).ToList()!;
-            UtilityClass.Features = _ctx.Features?.OrderBy(x => x.Id).ToList()!;
-            UtilityClass.Genres = _ctx.Genres?.OrderBy(x => x.Id).ToList()!;
+            FilmMediainfo UtilityClass = new()
+            {
+                Actors = _ctx.Actors?.OrderBy(x => x.Name).ToList()!,
+                Features = _ctx.Features?.OrderBy(x => x.Id).ToList()!,
+                Genres = _ctx.Genres?.OrderBy(x => x.Id).ToList()!
+            };
 
             return View(UtilityClass);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(FilmMediainfo utilityClass)
+        public IActionResult Create(FilmMediainfo formdata)
         {
             //Duration Description VisualizationCount -- Year IsNew FilmId
 
             if (!ModelState.IsValid)
             {
-                utilityClass.Actors = _ctx.Actors?.OrderBy(x => x.Name).ToList()!;
-                utilityClass.Features = _ctx.Features?.OrderBy(x => x.Id).ToList()!;
-                utilityClass.Genres = _ctx.Genres?.OrderBy(x => x.Id).ToList()!;
+                formdata.Actors = _ctx.Actors?.OrderBy(x => x.Name).ToList()!;
+                formdata.Features = _ctx.Features?.OrderBy(x => x.Id).ToList()!;
+                formdata.Genres = _ctx.Genres?.OrderBy(x => x.Id).ToList()!;
 
-                return View(utilityClass);
+                return View(formdata);
             }
 
-            utilityClass.Film.Duration = 0;
-                _ctx.Ingredients?
-                .Where(ing => utilityClass.IngredientIds
-                .Contains(ing.Id)).ToList();
+            formdata.Film.Duration = 0;
+            formdata.Film.MediaInfo.IsNew = true;
+            formdata.Film.MediaInfo.Cast =
+                _ctx.Actors?
+                .Where(act => formdata.ActorIds
+                .Contains(act.Id)).ToList()!;
 
-            _ctx.Pizzas?.Add(utilityClass.Pizza);
+            formdata.Film.MediaInfo.Genres =
+                _ctx.Genres?
+                .Where(g => formdata.GenreIds
+                .Contains(g.Id)).ToList()!;
+
+            formdata.Film.MediaInfo.Features =
+                _ctx.Features?
+                .Where(feat => formdata.FeatureIds
+                .Contains(feat.Id)).ToList()!;
+
+
+            _ctx.Films?.Add(formdata.Film);
+            _ctx.MediaInfos?.Add(formdata.Film.MediaInfo);
             _ctx.SaveChanges();
+
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Update(int id)
         {
-            Actor? actor = _ctx.Actors.FirstOrDefault(x => x.Id == id);
 
-            if (actor is null)
+            Film film = _ctx.Films.Include("MediaInfo").Where(f => f.Id == id).First();
+            MediaInfo mediaInfo = _ctx.MediaInfos.Include("Cast").Include("Genres").Include("Features").Where(m => m.FilmId == id).First();
+
+            if (film is null)
             {
                 return NotFound("Non è stata trovata nessuna corrispondenza");
             }
-            return View(actor);
+            else
+            {
+                FilmMediainfo UtilityClass = new()
+                {
+                    Film = film,
+                    Actors = _ctx.Actors.ToList(),
+                    Genres = _ctx.Genres.ToList(),
+                    Features = _ctx.Features.ToList(),
+                };
+
+                return View(UtilityClass);
+            }
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id,Actor actor)
+        public IActionResult Update(int id, FilmMediainfo formdata)
         {
-            actor.Id = id;
+            formdata.Film.Id = id;
 
-            if (!ModelState.IsValid)
-            {
-                return View(actor);
-            }
-            _ctx.Actors.Update(actor);
-            _ctx.SaveChanges();
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(actor);
+            //}
+            //_ctx.Actors.Update(actor);
+            //_ctx.SaveChanges();
             return RedirectToAction(nameof(Index));
 
         }

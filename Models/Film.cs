@@ -2,5 +2,5 @@
 
 public class Film : MediaContent
 {
-    public MediaInfo? MediaInfo { get; set; }
+    public MediaInfo MediaInfo { get; set; }
 }
