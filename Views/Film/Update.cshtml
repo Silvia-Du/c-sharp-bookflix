@@ -5,7 +5,7 @@
 @model FilmMediainfo;
 
 <h2>Modifica</h2>
-<form asp-controller="Actor" asp-action="Update" asp-route-id="@Model.Film.Id" method="post">
+<form asp-controller="Film" asp-action="Update" asp-route-id="@Model.Film.Id" method="post">
 @Html.AntiForgeryToken()
 @*titolo*@
     <div class="mb-3">
@@ -28,7 +28,7 @@
         <span asp-validation-for="Film.MediaInfo.Year" class="text-danger"></span>
     </div>
 
-@*generi*@          
+    @*generi*@          
     <div class="mb-3 form-group">
         <label><strong>Generi:</strong></label>
         <select asp-for="GenreIds"
@@ -40,7 +40,7 @@
         <span asp-validation-for="FeatureIds" class="text-danger"></span>
     </div>
 
-@*caratteristiche*@          
+    @*caratteristiche*@          
     <div class="mb-3 form-group">
         <label><strong>Caratteristiche:</strong></label>
         <select asp-for="FeatureIds"
@@ -48,22 +48,22 @@
                 size="6"
                 class="form-control mb-2 mr-sm-2 ml-sm-3 leftList"
                 asp-items="@(new SelectList(Model.Features, nameof(Feature.Id), nameof(Feature.Name)))">
-                che list, che valore avrà, cosa vuoi che mostri
+                @*che list, che valore avrà, cosa vuoi che mostri*@
         </select>
 
         <span asp-validation-for="FeatureIds" class="text-danger"></span>
     </div>
-@*attori*@
+    @*attori*@
     <div class="mb-3">
         <strong>Attori:</strong>
         <select multiple="multiple"
             asp-for="ActorIds"
             size="6"
             class="form-control mb-2 mr-sm-2 ml-sm-3 leftList">
-    @foreach (Actor actor in Model.Actors)
-    {
+            @foreach (Actor actor in Model.Actors)
+            {
                 <option value="@actor.Id">@actor.Name @actor.Surname</option>
-    }
+            }
         </select>
     </div>
 
